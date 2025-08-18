@@ -173,6 +173,23 @@
     .stats-table td{ padding:12px 10px; text-align:center; border-bottom:1px solid #f1f5f9; font-size:.9em; }
     .stats-table tbody tr:hover{ background:#f8fafc; }
     .stats-table tbody tr:last-child td{ border-bottom:none; }
+    /* 担当回数テーブル：1列目（メンバー）を固定 */
+.stats-table thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;                     /* ヘッダー最前面 */
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%); /* 既存のヘッダー色と揃える */
+}
+
+.stats-table tbody td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #fff;               /* 行背景と同じ */
+  box-shadow: 4px 0 0 #fff, 6px 0 8px rgba(0,0,0,.06); /* 右側に区切り感 */
+  font-weight: 600;
+  color: var(--blue-900);         /* 見出し色に合わせて強調 */
+}
     .member-name{ background:linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); font-weight:600; color:var(--blue-900); }
     .upper-stat{ background:linear-gradient(135deg, var(--upper-from) 0%, var(--upper-to) 100%); color:var(--upper-fg); font-weight:600; }
     .lower-stat{ background:linear-gradient(135deg, var(--lower-from) 0%, var(--lower-to) 100%); color:var(--lower-fg); font-weight:600; }
