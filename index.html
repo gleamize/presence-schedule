@@ -7,41 +7,40 @@
   <title>ゴミ回収ペア表</title>
   <style>
     :root{
-      /* ベースカラー（添付版を踏襲） */
-      --blue-900:#1e40af;
-      --blue-500:#3b82f6;
-      --slate-600:#475569;
+      /* 明るい青＋白の基調 */
+      --blue-900:#0b3e91;
+      --blue-800:#1e40af;
+      --blue-700:#2563eb;
+      --blue-600:#3b82f6;
+      --blue-300:#93c5fd;
       --slate-700:#334155;
-      --line:#e2e8f0;
+      --slate-600:#475569;
+      --line:#e5e7eb;
       --bg-grad-from:#f8fafc;
       --bg-grad-to:#e2e8f0;
 
-      /* セル背景（添付版を踏襲） */
-      --upper-from:#e0f2fe; --upper-to:#b3e5fc; --upper-fg:#0277bd; --upper-border:#03a9f4;
-      --lower-from:#f3e5f5; --lower-to:#e1bee7; --lower-fg:#7b1fa2; --lower-border:#9c27b0;
-      --vac-from:#e8f5e8;  --vac-to:#c8e6c9;  --vac-fg:#388e3c;   --vac-border:#4caf50;
+      /* 役割色（上/下/バキューム） */
+      --upper-from:#e0f2fe; --upper-to:#b3e5fc; --upper-fg:#075985; --upper-border:#38bdf8;
+      --lower-from:#f3e5f5; --lower-to:#e1bee7; --lower-fg:#6a1b9a; --lower-border:#9c27b0;
+      --vac-from:#e8f5e9;  --vac-to:#c8e6c9;  --vac-fg:#2e7d32; --vac-border:#4caf50;
 
-      /* 影・角丸 */
       --radius:12px;
       --shadow-lg:0 10px 30px rgba(0,0,0,.08);
       --shadow-md:0 4px 12px rgba(30,64,175,.10);
       --shadow-sm:0 2px 8px rgba(0,0,0,.06);
     }
 
-    /* ===== Page ===== */
+    /* ===== ページ全体 ===== */
     body{
       font-family:'Yu Gothic','Hiragino Kaku Gothic ProN','Meiryo',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       margin:0; padding:20px;
       background:linear-gradient(135deg,var(--bg-grad-from) 0%,var(--bg-grad-to) 100%);
-      min-height:100vh;
-      color:#0f172a;
+      min-height:100vh; color:#0f172a; line-height:1.65;
     }
     .container{
       max-width:1000px; margin:0 auto; background:#fff;
-      border-radius:var(--radius);
-      box-shadow:var(--shadow-lg);
-      padding:clamp(16px,4vw,40px);
-      border:1px solid var(--line);
+      border-radius:var(--radius); box-shadow:var(--shadow-lg);
+      padding:clamp(16px,4vw,40px); border:1px solid var(--line);
     }
     h1{
       text-align:center; color:var(--blue-900);
@@ -49,7 +48,7 @@
       margin:0 0 28px; font-weight:700; letter-spacing:.5px;
     }
 
-    /* ===== Week block ===== */
+    /* ===== 週ごとのブロック ===== */
     .week-section{
       margin-bottom:clamp(18px,3vw,35px);
       border-radius:8px; overflow:hidden;
@@ -59,46 +58,46 @@
     }
     .week-section:hover{ transform:translateY(-1px); box-shadow:0 8px 20px rgba(30,64,175,.15); }
     .week-header{
-      background:linear-gradient(135deg,var(--blue-900) 0%, var(--blue-500) 100%);
+      background:linear-gradient(135deg,var(--blue-900) 0%, var(--blue-600) 100%);
       color:#fff; padding:14px 16px; text-align:center;
       font-size:clamp(1.05rem,2.6vw,1.3rem); font-weight:600; margin:0;
     }
 
-    /* ===== Tables ===== */
+    /* ===== テーブル共通 ===== */
     .table-wrap{
-      overflow-x:auto; -webkit-overflow-scrolling:touch;
-      background:#fff;
-      /* スクロールヒント用の影 */
-      box-shadow:inset -8px 0 10px -10px rgba(0,0,0,.15);
+      overflow-x:auto; -webkit-overflow-scrolling:touch; background:#fff;
+      box-shadow:inset -8px 0 10px -10px rgba(0,0,0,.15); /* スクロールヒント */
+      border-radius:8px;
+      margin:12px;
     }
     table{
-      width:100%; border-collapse:collapse; font-size:clamp(.88rem,2.4vw,.95rem);
-      min-width:560px; /* スマホで窮屈に詰まらないよう最低幅を確保 */
+      width:100%; border-collapse:collapse; font-size:clamp(.9rem,2.4vw,.95rem);
+      min-width:560px; /* スマホで窮屈にしない最低幅 */
     }
     thead th{
       position:sticky; top:0; z-index:2;
       background:linear-gradient(135deg, var(--slate-600) 0%, var(--slate-700) 100%);
       color:#fff; font-weight:600; text-align:center;
-      padding:12px 10px; border-bottom:2px solid var(--blue-500);
+      padding:12px 10px; border-bottom:2px solid var(--blue-600);
       white-space:nowrap;
     }
     tbody td{
       padding:12px 10px; text-align:center;
       border-bottom:1px solid #f1f5f9; transition:background-color .15s ease;
-      vertical-align:middle;
+      vertical-align:middle; background:#fff;
     }
-    tbody tr:hover td{ background:#f8fafc; }
+    tbody tr:nth-child(even) td{ background:#f8fafc; }
+    tbody tr:hover td{ background:#eef6ff; }
 
-    /* sticky 1列目（曜日） */
+    /* 週表：1列目（曜日）を横スクロールで固定 */
     .day-cell{
       position:sticky; left:0; z-index:1;
-      background:linear-gradient(135deg, var(--blue-500) 0%, #2563eb 100%);
-      color:#fff; font-weight:600; min-width:64px;
-      /* 右に区切り影で可読性UP */
+      background:linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%) !important;
+      color:#fff; font-weight:700; min-width:64px;
       box-shadow:inset -8px 0 10px -10px rgba(0,0,0,.25);
     }
 
-    /* 役割セル（添付版の色を踏襲） */
+    /* 役割セル（上/下/バキューム） */
     .upper-floor{
       background:linear-gradient(135deg, var(--upper-from) 0%, var(--upper-to) 100%);
       color:var(--upper-fg); border-left:4px solid var(--upper-border);
@@ -111,15 +110,15 @@
       background:linear-gradient(135deg, var(--vac-from) 0%, var(--vac-to) 100%);
       color:var(--vac-fg); border-left:4px solid var(--vac-border);
     }
-
     .person-name{
       display:inline-block; padding:6px 10px; margin:2px;
       border-radius:6px; background:#fff; border:1px solid var(--line);
       font-size:.9em; font-weight:500; box-shadow:0 1px 3px rgba(0,0,0,.06);
       white-space:nowrap;
     }
+    .scroll-hint{ font-size:.85em; color:#64748b; margin:6px 14px 12px; }
 
-    /* ===== Info block ===== */
+    /* ===== 詳細セクション ===== */
     .info-section{
       margin-top:clamp(24px,4vw,40px);
       background:linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -138,7 +137,7 @@
     .info-title{ font-size:1.05em; font-weight:600; color:var(--blue-900); margin:0 0 6px; }
     .info-desc{ font-size:.95em; color:#475569; line-height:1.6; }
     .floor-num{
-      background:linear-gradient(135deg, var(--blue-900) 0%, var(--blue-500) 100%);
+      background:linear-gradient(135deg, var(--blue-900) 0%, var(--blue-600) 100%);
       color:#fff; padding:2px 6px; border-radius:4px; font-weight:700; font-size:.92em; margin:0 1px;
     }
     .vacuum-schedule{ margin-top:8px; }
@@ -152,61 +151,51 @@
     .notice-text{ color:#92400e; font-size:.95em; line-height:1.6; }
     .notice-text strong{ color:var(--blue-900); }
 
-    /* ===== Stats ===== */
+    /* ===== 統計セクション ===== */
     .stats-section{
       margin-top:clamp(20px,3.5vw,30px); background:#fff; border-radius:var(--radius);
       border:1px solid var(--line); overflow:hidden; box-shadow:var(--shadow-md);
     }
     .stats-header{
-      background:linear-gradient(135deg, var(--blue-900) 0%, var(--blue-500) 100%);
+      background:linear-gradient(135deg, var(--blue-900) 0%, var(--blue-600) 100%);
       color:#fff; padding:12px 16px; text-align:center; font-size:clamp(1rem,2.4vw,1.2rem); font-weight:600; margin:0;
     }
     .stats-content{ padding:clamp(14px,3.5vw,25px); }
     .stats-table{
-      width:100%; border-collapse:collapse; margin-bottom:16px; border-radius:8px; overflow:hidden; box-shadow:var(--shadow-sm);
+      width:100%; border-collapse:collapse; margin:12px; border-radius:8px; overflow:hidden; box-shadow:var(--shadow-sm);
       min-width:520px;
     }
     .stats-table th{
       background:linear-gradient(135deg, #64748b 0%, #475569 100%);
       color:#fff; font-weight:600; padding:12px 10px; text-align:center; font-size:.95em; white-space:nowrap;
     }
-    .stats-table td{ padding:12px 10px; text-align:center; border-bottom:1px solid #f1f5f9; font-size:.9em; }
-    .stats-table tbody tr:hover{ background:#f8fafc; }
-    .stats-table tbody tr:last-child td{ border-bottom:none; }
-    /* 担当回数テーブル：1列目（メンバー）を固定 */
-.stats-table thead th:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 3;                     /* ヘッダー最前面 */
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%); /* 既存のヘッダー色と揃える */
-}
-
-.stats-table tbody td:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  background: #fff;               /* 行背景と同じ */
-  box-shadow: 4px 0 0 #fff, 6px 0 8px rgba(0,0,0,.06); /* 右側に区切り感 */
-  font-weight: 600;
-  color: var(--blue-900);         /* 見出し色に合わせて強調 */
-}
+    .stats-table td{ padding:12px 10px; text-align:center; border-bottom:1px solid #f1f5f9; font-size:.92em; background:#fff; }
+    .stats-table tbody tr:nth-child(even) td{ background:#f8fafc; }
+    .stats-table tbody tr:hover td{ background:#eef6ff; }
     .member-name{ background:linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); font-weight:600; color:var(--blue-900); }
-    .upper-stat{ background:linear-gradient(135deg, var(--upper-from) 0%, var(--upper-to) 100%); color:var(--upper-fg); font-weight:600; }
-    .lower-stat{ background:linear-gradient(135deg, var(--lower-from) 0%, var(--lower-to) 100%); color:var(--lower-fg); font-weight:600; }
-    .vacuum-stat{ background:linear-gradient(135deg, var(--vac-from) 0%, var(--vac-to) 100%); color:var(--vac-fg); font-weight:600; }
-    .total-stat{ background:linear-gradient(135deg, #fef3cd 0%, #fde68a 100%); color:#92400e; font-weight:700; }
+
+    /* ★ 担当回数テーブル：1列目（メンバー）を固定 */
+    .stats-table thead th:first-child{
+      position:sticky; left:0; z-index:3;
+      background:linear-gradient(135deg, #64748b 0%, #475569 100%);
+      color:#fff;
+    }
+    .stats-table tbody td:first-child{
+      position:sticky; left:0; z-index:2; background:#fff;
+      box-shadow:4px 0 0 #fff, 6px 0 8px rgba(0,0,0,.06);
+      font-weight:700; color:var(--blue-900);
+    }
+
+    /* 青で強調（25回/5回） */
+    .em-blue{ color:var(--blue-900); font-weight:700; }
 
     .balance-note{
       background:linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
       border:1px solid #22c55e; border-radius:8px; padding:12px; display:flex; gap:12px; align-items:flex-start;
-      color:#15803d; font-size:.95em; line-height:1.6;
+      color:#15803d; font-size:.95em; line-height:1.6; margin:8px 12px 4px;
     }
 
-    /* ===== Responsive ===== */
-    .scroll-hint{ font-size:.85em; color:#64748b; margin:6px 0 0; }
-    .table-wrap::-webkit-scrollbar{ height:10px }
-    .table-wrap::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:999px }
-
+    /* ===== レスポンシブ ===== */
     @media (max-width: 768px){
       body{ padding:12px }
       .container{ margin:8px; box-shadow:0 6px 18px rgba(0,0,0,.06) }
@@ -215,73 +204,38 @@
       .person-name{ padding:5px 8px; font-size:.82em }
       .week-section{ box-shadow:0 3px 10px rgba(30,64,175,.10) }
       .notice-box{ padding:10px }
-      .stats-table{ font-size:.92em }
     }
     @media (prefers-reduced-motion: reduce){
       *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
       .week-section:hover{ transform:none; }
     }
-    /* 青で強調（太字は <strong> で付与） */
-.em-blue {
-  color: var(--blue-900, #0b3e91); /* 変数が無い場合は #0b3e91 を使用 */
-  font-weight: 700;
-}
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🗑️ ゴミ回収ペア表</h1>
 
-    <!-- ====== 第1週〜第5週 ====== -->
-    <!-- ★ 各週テーブルは“添付版そのまま”です（内容は省略せずに貼り付け） -->
+    <!-- ============ 第1週 ============ -->
     <div class="week-section">
       <h2 class="week-header">第1週</h2>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>曜日</th><th>🏢 上階</th><th>🏠 下階</th><th>🧹 バキューム</th>
-            </tr>
+            <tr><th>曜日</th><th>🏢 上階</th><th>🏠 下階</th><th>🧹 バキューム</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="day-cell">月</td>
-              <td class="upper-floor"><span class="person-name">逢坂</span><span class="person-name">山本</span></td>
-              <td class="lower-floor"><span class="person-name">金丸</span><span class="person-name">佐武</span></td>
-              <td class="vacuum"><span class="person-name">山城</span></td>
-            </tr>
-            <tr>
-              <td class="day-cell">火</td>
-              <td class="upper-floor"><span class="person-name">佐武</span><span class="person-name">山城</span></td>
-              <td class="lower-floor"><span class="person-name">逢坂</span><span class="person-name">金丸</span></td>
-              <td class="vacuum"><span class="person-name">山本</span></td>
-            </tr>
-            <tr>
-              <td class="day-cell">水</td>
-              <td class="upper-floor"><span class="person-name">逢坂</span><span class="person-name">佐武</span></td>
-              <td class="lower-floor"><span class="person-name">山本</span><span class="person-name">山城</span></td>
-              <td class="vacuum"><span class="person-name">金丸</span></td>
-            </tr>
-            <tr>
-              <td class="day-cell">木</td>
-              <td class="upper-floor"><span class="person-name">山本</span><span class="person-name">金丸</span></td>
-              <td class="lower-floor"><span class="person-name">逢坂</span><span class="person-name">山城</span></td>
-              <td class="vacuum"><span class="person-name">佐武</span></td>
-            </tr>
-            <tr>
-              <td class="day-cell">金</td>
-              <td class="upper-floor"><span class="person-name">金丸</span><span class="person-name">山城</span></td>
-              <td class="lower-floor"><span class="person-name">山本</span><span class="person-name">佐武</span></td>
-              <td class="vacuum"><span class="person-name">逢坂</span></td>
-            </tr>
+            <tr><td class="day-cell">月</td><td class="upper-floor"><span class="person-name">逢坂</span><span class="person-name">山本</span></td><td class="lower-floor"><span class="person-name">金丸</span><span class="person-name">佐武</span></td><td class="vacuum"><span class="person-name">山城</span></td></tr>
+            <tr><td class="day-cell">火</td><td class="upper-floor"><span class="person-name">佐武</span><span class="person-name">山城</span></td><td class="lower-floor"><span class="person-name">逢坂</span><span class="person-name">金丸</span></td><td class="vacuum"><span class="person-name">山本</span></td></tr>
+            <tr><td class="day-cell">水</td><td class="upper-floor"><span class="person-name">逢坂</span><span class="person-name">佐武</span></td><td class="lower-floor"><span class="person-name">山本</span><span class="person-name">山城</span></td><td class="vacuum"><span class="person-name">金丸</span></td></tr>
+            <tr><td class="day-cell">木</td><td class="upper-floor"><span class="person-name">山本</span><span class="person-name">金丸</span></td><td class="lower-floor"><span class="person-name">逢坂</span><span class="person-name">山城</span></td><td class="vacuum"><span class="person-name">佐武</span></td></tr>
+            <tr><td class="day-cell">金</td><td class="upper-floor"><span class="person-name">金丸</span><span class="person-name">山城</span></td><td class="lower-floor"><span class="person-name">山本</span><span class="person-name">佐武</span></td><td class="vacuum"><span class="person-name">逢坂</span></td></tr>
           </tbody>
         </table>
       </div>
       <p class="scroll-hint">※ スマホでは横にスクロールできます</p>
     </div>
 
-    <!-- ※ 第2〜第5週、以下は添付版と同一構成（中身は省略せずそのまま貼付） -->
-    <!-- 第2週 -->
+    <!-- ============ 第2週 ============ -->
     <div class="week-section">
       <h2 class="week-header">第2週</h2>
       <div class="table-wrap">
@@ -299,7 +253,7 @@
       <p class="scroll-hint">※ スマホでは横にスクロールできます</p>
     </div>
 
-    <!-- 第3週 -->
+    <!-- ============ 第3週 ============ -->
     <div class="week-section">
       <h2 class="week-header">第3週</h2>
       <div class="table-wrap">
@@ -317,7 +271,7 @@
       <p class="scroll-hint">※ スマホでは横にスクロールできます</p>
     </div>
 
-    <!-- 第4週 -->
+    <!-- ============ 第4週 ============ -->
     <div class="week-section">
       <h2 class="week-header">第4週</h2>
       <div class="table-wrap">
@@ -335,7 +289,7 @@
       <p class="scroll-hint">※ スマホでは横にスクロールできます</p>
     </div>
 
-    <!-- 第5週 -->
+    <!-- ============ 第5週 ============ -->
     <div class="week-section">
       <h2 class="week-header">第5週</h2>
       <div class="table-wrap">
@@ -353,7 +307,7 @@
       <p class="scroll-hint">※ スマホでは横にスクロールできます</p>
     </div>
 
-    <!-- ===== 詳細 ===== -->
+    <!-- ============ 各項目の詳細 ============ -->
     <div class="info-section">
       <h2 class="info-header">📋 各項目の詳細</h2>
       <div class="info-content">
@@ -384,7 +338,7 @@
       </div>
     </div>
 
-    <!-- ===== 統計 ===== -->
+    <!-- ============ 5週間の担当回数 ============ -->
     <div class="stats-section">
       <h2 class="stats-header">📊 5週間における各メンバーの業務担当回数</h2>
       <div class="stats-content">
@@ -393,27 +347,27 @@
             <thead>
               <tr>
                 <th>メンバー</th>
-                <th class="upper-stat">🏢 上階</th>
-                <th class="lower-stat">🏠 下階</th>
-                <th class="vacuum-stat">🧹 バキューム</th>
-                <th class="total-stat">合計</th>
+                <th>🏢 上階</th>
+                <th>🏠 下階</th>
+                <th>🧹 バキューム</th>
+                <th>合計</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td class="member-name">逢坂</td><td class="upper-stat">10回</td><td class="lower-stat">10回</td><td class="vacuum-stat">5回</td><td class="total-stat">25回</td></tr>
-              <tr><td class="member-name">山本</td><td class="upper-stat">10回</td><td class="lower-stat">10回</td><td class="vacuum-stat">5回</td><td class="total-stat">25回</td></tr>
-              <tr><td class="member-name">金丸</td><td class="upper-stat">10回</td><td class="lower-stat">10回</td><td class="vacuum-stat">5回</td><td class="total-stat">25回</td></tr>
-              <tr><td class="member-name">佐武</td><td class="upper-stat">10回</td><td class="lower-stat">10回</td><td class="vacuum-stat">5回</td><td class="total-stat">25回</td></tr>
-              <tr><td class="member-name">山城</td><td class="upper-stat">10回</td><td class="lower-stat">10回</td><td class="vacuum-stat">5回</td><td class="total-stat">25回</td></tr>
+              <tr><td class="member-name">逢坂</td><td>10回</td><td>10回</td><td>5回</td><td>25回</td></tr>
+              <tr><td class="member-name">山本</td><td>10回</td><td>10回</td><td>5回</td><td>25回</td></tr>
+              <tr><td class="member-name">金丸</td><td>10回</td><td>10回</td><td>5回</td><td>25回</td></tr>
+              <tr><td class="member-name">佐武</td><td>10回</td><td>10回</td><td>5回</td><td>25回</td></tr>
+              <tr><td class="member-name">山城</td><td>10回</td><td>10回</td><td>5回</td><td>25回</td></tr>
             </tbody>
           </table>
         </div>
         <p class="scroll-hint">※ スマホでは横にスクロールできます</p>
 
-        <div class="balance-note" style="margin-top:10px">
+        <div class="balance-note">
           <div>⚖️</div>
-          <div>
-            全メンバーが<strong class="em-blue">25回</strong>の業務を担当し、バキューム業務は各メンバー<strong class="em-blue">5回</strong>ずつ均等に配分されています。木曜日の下階業務範囲調整により、負担の公平性が保たれています。
+          <div class="balance-note-text">
+            全メンバーが <strong class="em-blue">25回</strong> の業務を担当し、バキューム業務は各メンバー <strong class="em-blue">5回</strong> ずつ均等に配分されています。木曜日の下階業務範囲調整により、負担の公平性が保たれています。
           </div>
         </div>
       </div>
