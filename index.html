@@ -3,21 +3,29 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>ゴミ回収ペア表（ライトテーマ）</title>
+<title>ゴミ回収ペア表（ライト＋役割カラー）</title>
 <style>
-  /* ====== Light (WBS風：白＋ブルー基調) ====== */
+  /* ====== Light theme + Role colors ====== */
   :root{
-    --bg:#f6f8fb;            /* ページ背景 */
-    --card:#ffffff;          /* カード背景 */
-    --ink:#0f172a;           /* 文字(濃) */
-    --muted:#64748b;         /* 補助文字 */
-    --line:#e5e7eb;          /* 罫線 */
-    --accent:#1166cc;        /* 基調ブルー */
-    --accent-2:#1e88ff;      /* 明るめブルー */
-    --chip:#f1f5f9;          /* チップ背景 */
-    --radius:14px;
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --ink:#0f172a;
+    --muted:#667085;
+    --line:#e5e7eb;
+    --accent:#1158c7;
+    --accent-2:#1e88ff;
     --shadow:0 4px 16px rgba(15,23,42,.08);
+
+    /* 役割カラー */
+    --upper:#1e88ff;         /* 上階：ブルー */
+    --lower:#7c3aed;         /* 下階：パープル */
+    --vac:#16a34a;           /* バキューム：グリーン */
+
+    --chip:#f3f6fb;          /* チップ背景 */
+    --chip-line:#dbe2ef;
+    --radius:14px;
   }
+
   html,body{height:100%}
   body{
     margin:0;
@@ -61,15 +69,22 @@
 
   /* ====== TABLE (PC/タブレット) ====== */
   .table-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:12px; border:1px solid var(--line)}
-  table{width:100%; border-collapse:collapse; min-width:520px; background:#fff}
+  table{width:100%; border-collapse:collapse; min-width:540px; background:#fff}
   th,td{border-bottom:1px solid var(--line); padding:10px 8px; text-align:center; white-space:nowrap}
   thead th{position:sticky; top:0; background:#eff6ff; color:#0b3e91; z-index:1}
   th{font-weight:700}
-  td .chip{display:inline-block; background:var(--chip); border:1px solid var(--line); padding:4px 10px; border-radius:999px; margin:2px; font-size:13px}
   td.day{font-weight:700; color:#0b3e91}
-  td.upper{background:linear-gradient(180deg,#eef6ff,#ffffff)}
-  td.lower{background:linear-gradient(180deg,#f0f7ff,#ffffff)}
-  td.vac{background:linear-gradient(180deg,#ebfff4,#ffffff)}
+
+  /* 役割行の下地（淡グラデ） */
+  td.upper{background:linear-gradient(180deg, color-mix(in oklab, var(--upper) 12%, #fff), #fff)}
+  td.lower{background:linear-gradient(180deg, color-mix(in oklab, var(--lower) 12%, #fff), #fff)}
+  td.vac  {background:linear-gradient(180deg, color-mix(in oklab, var(--vac)   12%, #fff), #fff)}
+
+  /* メンバー名チップ：行の役割に応じて色縁取り */
+  .chip{display:inline-block; background:var(--chip); border:1px solid var(--chip-line); padding:5px 10px; border-radius:999px; margin:2px; font-size:13px}
+  td.upper .chip{border-color: color-mix(in oklab, var(--upper) 35%, var(--chip-line));}
+  td.lower .chip{border-color: color-mix(in oklab, var(--lower) 35%, var(--chip-line));}
+  td.vac   .chip{border-color: color-mix(in oklab, var(--vac)   35%, var(--chip-line));}
 
   /* ====== MOBILE CARDS ====== */
   .mobile-list{display:none; gap:10px; flex-direction:column}
@@ -84,7 +99,12 @@
   .section{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px; margin:16px 0; box-shadow:var(--shadow)}
   .section h2{margin:0 0 8px; font-size:16px}
   .legend{display:flex; gap:8px; flex-wrap:wrap}
-  .legend .pill{border:1px solid var(--line); background:#f8fafc; padding:4px 8px; border-radius:999px; color:var(--muted); font-size:12px}
+  .pill{border:1px solid var(--line); background:#f8fafc; padding:4px 8px; border-radius:999px; color:var(--muted); font-size:12px}
+  .pill .num{font-weight:700; color:#0b3e91}
+  .pill.upper{border-color: color-mix(in oklab, var(--upper) 35%, var(--line));}
+  .pill.lower{border-color: color-mix(in oklab, var(--lower) 35%, var(--line));}
+  .pill.vac  {border-color: color-mix(in oklab, var(--vac)   35%, var(--line));}
+
   .note{display:flex; gap:10px; background:#f7fbff; border:1px solid #d9e9ff; border-radius:10px; padding:10px; color:#0b3e91; font-size:14px}
   .note .icon{font-size:18px}
 
@@ -93,14 +113,17 @@
   .stats-table th,.stats-table td{border-bottom:1px solid var(--line); padding:10px 8px; text-align:center}
   .stats-grid{display:none; gap:10px}
   .stats-grid .card .row{grid-template-columns:90px 1fr}
+  .stats-msg{margin-top:8px; color:#0b3e91}
 
   /* ====== BREAKPOINT ====== */
   @media (max-width: 640px){
     .toolbar .hide-sm{display:none}
     .table-wrap{display:none}        /* 週表はスマホでカード表示へ */
     .mobile-list{display:flex}
-    .stats-table{display:none}       /* ← 修正：スマホで統計表を隠す */
-    .stats-grid{display:grid}        /* ← 修正：スマホで統計カードを表示 */
+
+    .stats-table{display:none}       /* スマホで統計表を隠す */
+    .stats-grid{display:grid}        /* スマホで統計カードを表示 */
+
     .appbar-inner{padding:10px 14px}
     .container{padding:0 12px}
   }
@@ -111,7 +134,7 @@
 <body>
   <header class="appbar">
     <div class="appbar-inner">
-      <div class="title">🗑️ ゴミ回収ペア表（ライトテーマ）</div>
+      <div class="title">🗑️ ゴミ回収ペア表（ライト＋役割カラー）</div>
       <div class="toolbar">
         <button class="btn" id="openAll">全て開く</button>
         <button class="btn" id="closeAll">全て閉じる</button>
@@ -121,7 +144,7 @@
   </header>
 
   <main class="container">
-    <!-- ===== 第1週〜第5週（中身はそのまま） ===== -->
+    <!-- ===== 第1週〜第5週（中身は従来どおり） ===== -->
     <!-- 第1週 -->
     <details class="week" open>
       <summary>第1週 <span class="tag">Mon-Fri</span><span class="chev">▾</span></summary>
@@ -222,17 +245,17 @@
       </div>
     </details>
 
-    <!-- 詳細 -->
+    <!-- 詳細（数字は強調色で） -->
     <section class="section">
       <h2>📋 各項目の詳細</h2>
       <div class="legend" style="margin-bottom:6px">
-        <span class="pill">上階：17F〜15F</span>
-        <span class="pill">下階：14F〜11F（木曜のみ14F〜12F）</span>
-        <span class="pill">バキューム：月水金→17F / 火→10F / 木→11F</span>
+        <span class="pill upper">上階：<span class="num">17F</span>〜<span class="num">15F</span></span>
+        <span class="pill lower">下階：<span class="num">14F</span>〜<span class="num">11F</span>（木曜のみ <span class="num">14F</span>〜<span class="num">12F</span>）</span>
+        <span class="pill vac">バキューム：<span class="num">月・水・金</span>→<span class="num">17F</span> / <span class="num">火</span>→<span class="num">10F</span> / <span class="num">木</span>→<span class="num">11F</span></span>
       </div>
       <div class="note" style="margin-top:10px">
         <div class="icon">💡</div>
-        <div>木曜日は下階の作業範囲が3フロア（14F〜12F）。全員の負担を均等化する目的で<strong>5週間1サイクル</strong>のローテーションを採用しています。</div>
+        <div>木曜日は下階の作業範囲が3フロア（<span class="num">14F</span>〜<span class="num">12F</span>）。全員の負担を均等化する目的で<strong>5週間1サイクル</strong>のローテーションを採用しています。</div>
       </div>
     </section>
 
@@ -251,8 +274,13 @@
           </tbody>
         </table>
       </div>
-      <!-- スマホ表示用カード（CSSで切替） -->
+      <!-- スマホ用カード -->
       <div class="stats-grid" aria-hidden="true"></div>
+
+      <!-- ★ ご指定の文面（復活） -->
+      <p class="stats-msg">
+        全メンバーが<strong>25回</strong>の業務を担当し、バキューム業務は各メンバー<strong>5回ずつ</strong>均等に配分されています。木曜日の下階業務範囲調整により、業務負担の公平性が保たれています。
+      </p>
     </section>
   </main>
 
