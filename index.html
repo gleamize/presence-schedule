@@ -204,23 +204,6 @@
       *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
       .week-section:hover{ transform:none; }
     }
-    /* 担当回数テーブル：1列目（メンバー）を固定 */
-.stats-table thead th:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 3;                     /* ヘッダー最前面 */
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%); /* 既存のヘッダー色と揃える */
-}
-
-.stats-table tbody td:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  background: #fff;               /* 行背景と同じ */
-  box-shadow: 4px 0 0 #fff, 6px 0 8px rgba(0,0,0,.06); /* 右側に区切り感 */
-  font-weight: 600;
-  color: var(--blue-900);         /* 見出し色に合わせて強調 */
-}
     /* 青で強調（太字は <strong> で付与） */
 .em-blue {
   color: var(--blue-900, #0b3e91); /* 変数が無い場合は #0b3e91 を使用 */
