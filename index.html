@@ -6,36 +6,6 @@
     <title>立会いシフト表</title>
     <meta name="robots" content="noindex, nofollow">
     <style>
-        /* PC閲覧専用の設定 */
-        @media (max-width: 767px) {
-            body {
-                padding: 10px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                text-align: center;
-            }
-
-            .container, .notice-message {
-                display: none;
-            }
-
-            .notice-message-visible {
-                display: block;
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: #2d3748;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .notice-message-visible {
-                display: none;
-            }
-        }
-    
         * {
             margin: 0;
             padding: 0;
@@ -260,28 +230,6 @@
             border: 1px solid #feb2b2;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .schedule-table th,
-            .schedule-table td {
-                padding: 8px 10px;
-                font-size: 0.8rem;
-            }
-
-            .member-name {
-                font-size: 0.7rem;
-                padding: 2px 6px;
-                margin: 1px;
-            }
-        }
-
         .table-container {
             overflow-x: auto;
         }
@@ -353,7 +301,6 @@
     </style>
 </head>
 <body>
-    <div class="notice-message-visible">このサイトはPCでの閲覧を推奨しています。<br>PCでアクセスしてください。</div>
     <div class="container">
         <div class="header">
             <h1>📋 立会いシフト表</h1>
