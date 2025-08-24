@@ -4,7 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>立会いシフト表</title>
+    <meta name="robots" content="noindex, nofollow">
     <style>
+        /* PC閲覧専用の設定 */
+        @media (max-width: 767px) {
+            body {
+                padding: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                text-align: center;
+            }
+
+            .container, .notice-message {
+                display: none;
+            }
+
+            .notice-message-visible {
+                display: block;
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #2d3748;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .notice-message-visible {
+                display: none;
+            }
+        }
+    
         * {
             margin: 0;
             padding: 0;
@@ -69,6 +100,17 @@
             font-size: 1.125rem;
             text-align: center;
         }
+        
+        /* 5週間担当回数集計のヘッダー色を青に変更 */
+        .summary-header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 16px 24px;
+            font-weight: 600;
+            font-size: 1.125rem;
+            text-align: center;
+            border-bottom: 1px solid #bee3f8;
+        }
 
         .schedule-table {
             width: 100%;
@@ -93,6 +135,18 @@
             border-right: none;
         }
 
+        /* 5週間担当回数集計のテーブルヘッダーを青に変更 */
+        .summary-table th {
+            background: #3182ce;
+            color: white;
+            border-bottom: 2px solid #bee3f8;
+            border-right: 1px solid #bee3f8;
+        }
+        
+        .summary-table th:last-child {
+            border-right: none;
+        }
+
         .schedule-table td {
             padding: 12px 16px;
             text-align: center;
@@ -100,10 +154,20 @@
             vertical-align: middle;
             font-size: 0.875rem;
         }
+        
+        /* 5週間担当回数集計のテーブルセル背景色を青に変更 */
+        .summary-table td {
+            background: rgba(49, 130, 206, 0.1);
+            border-bottom: 1px solid #bee3f8;
+        }
 
         .schedule-table tr:hover {
             background: #f7fafc;
             transition: background-color 0.2s ease;
+        }
+
+        .summary-table tr:hover {
+            background: rgba(49, 130, 206, 0.2);
         }
 
         .day-cell {
@@ -113,6 +177,13 @@
             text-align: left;
             white-space: nowrap;
             border-right: 1px solid #e2e8f0;
+        }
+        
+        /* 5週間担当回数集計のメンバー名セル背景色を青に変更 */
+        .summary-table .day-cell {
+            background: rgba(49, 130, 206, 0.1);
+            color: #2c5282;
+            border-right: 1px solid #bee3f8;
         }
 
         .meeting-data {
@@ -131,6 +202,25 @@
             background: rgba(229, 62, 62, 0.1);
             border-left: 3px solid #f56565;
             border-right: 1px solid #f56565;
+        }
+        
+        /* 5週間担当回数集計のセル色を青系に統一 */
+        .summary-data-cell {
+            background: rgba(49, 130, 206, 0.1);
+            border-left: 3px solid #4299e1;
+            border-right: 1px solid #bee3f8;
+            color: #2c5282;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .summary-data-cell-total {
+            background: rgba(49, 130, 206, 0.2);
+            border-left: 3px solid #4299e1;
+            border-right: 1px solid #bee3f8;
+            color: #2c5282;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         .empty-data {
@@ -263,6 +353,7 @@
     </style>
 </head>
 <body>
+    <div class="notice-message-visible">このサイトはPCでの閲覧を推奨しています。<br>PCでアクセスしてください。</div>
     <div class="container">
         <div class="header">
             <h1>📋 立会いシフト表</h1>
@@ -698,10 +789,10 @@
                 </div>
             </div>
 
-            <div class="week-section">
-                <div class="week-header">📊 5週間担当回数集計</div>
+            <div class="week-section" style="background: #e3f2fd;">
+                <div class="summary-header">📊 5週間担当回数集計</div>
                 <div class="table-container">
-                    <table class="schedule-table">
+                    <table class="schedule-table summary-table">
                         <thead>
                             <tr>
                                 <th>メンバー</th>
@@ -716,48 +807,48 @@
                         <tbody>
                             <tr>
                                 <td class="day-cell">逢坂</td>
-                                <td class="data-cell meeting-data">4</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell support-data">6</td>
-                                <td class="data-cell priority-data" style="border-right: 3px solid #fdd835;">11</td>
-                                <td class="data-cell" style="background: #fffbeb; color: #234e52; font-weight: 600;">25</td>
+                                <td class="summary-data-cell">4回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">6回</td>
+                                <td class="summary-data-cell">11回</td>
+                                <td class="summary-data-cell-total">25回</td>
                             </tr>
                             <tr>
                                 <td class="day-cell">山本</td>
-                                <td class="data-cell meeting-data">4</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell support-data">6</td>
-                                <td class="data-cell priority-data" style="border-right: 3px solid #fdd835;">11</td>
-                                <td class="data-cell" style="background: #fffbeb; color: #234e52; font-weight: 600;">25</td>
+                                <td class="summary-data-cell">4回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">6回</td>
+                                <td class="summary-data-cell">11回</td>
+                                <td class="summary-data-cell-total">25回</td>
                             </tr>
                             <tr>
                                 <td class="day-cell">金丸</td>
-                                <td class="data-cell meeting-data">4</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell support-data">6</td>
-                                <td class="data-cell priority-data" style="border-right: 3px solid #fdd835;">11</td>
-                                <td class="data-cell" style="background: #fffbeb; color: #234e52; font-weight: 600;">25</td>
+                                <td class="summary-data-cell">4回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">6回</td>
+                                <td class="summary-data-cell">11回</td>
+                                <td class="summary-data-cell-total">25回</td>
                             </tr>
                             <tr>
                                 <td class="day-cell">佐武</td>
-                                <td class="data-cell meeting-data">4</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell support-data">6</td>
-                                <td class="data-cell priority-data" style="border-right: 3px solid #fdd835;">11</td>
-                                <td class="data-cell" style="background: #fffbeb; color: #234e52; font-weight: 600;">25</td>
+                                <td class="summary-data-cell">4回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">6回</td>
+                                <td class="summary-data-cell">11回</td>
+                                <td class="summary-data-cell-total">25回</td>
                             </tr>
                             <tr>
                                 <td class="day-cell">山城</td>
-                                <td class="data-cell meeting-data">4</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell meeting-data">2</td>
-                                <td class="data-cell support-data">6</td>
-                                <td class="data-cell priority-data" style="border-right: 3px solid #fdd835;">11</td>
-                                <td class="data-cell" style="background: #fffbeb; color: #234e52; font-weight: 600;">25</td>
+                                <td class="summary-data-cell">4回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">2回</td>
+                                <td class="summary-data-cell">6回</td>
+                                <td class="summary-data-cell">11回</td>
+                                <td class="summary-data-cell-total">25回</td>
                             </tr>
                         </tbody>
                     </table>
