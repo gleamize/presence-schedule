@@ -29,6 +29,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             overflow: hidden;
             border: 1px solid #e2e8f0;
+            padding-top: 20px;
         }
 
         .header {
@@ -298,12 +299,46 @@
         .points-section li {
             margin-bottom: 12px;
         }
+
+        /* ゴミ回収ペア表のスタイルを流用 */
+        .header-container {
+            position: relative;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-container h1 {
+            margin: 0;
+            display: inline-block;
+        }
+        
+        .presence-link {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #4299e1;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .presence-link:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="header-container">
             <h1>📋 立会いシフト表</h1>
+            <a href="https://gleamize.github.io/garbage-schedule/" class="presence-link">ゴミ回収ペア表</a>
         </div>
         <div class="content">
             <div class="week-section">
