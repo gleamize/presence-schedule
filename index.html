@@ -332,11 +332,33 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
+        
+        .sp-link {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #6c757d;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .sp-link:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-container">
+            <a href="https://gleamize.github.io/sp_presence-schedule/" class="sp-link">SP版表示</a>
             <h1>📋 立会いシフト表</h1>
             <a href="https://gleamize.github.io/garbage-schedule/" class="presence-link">ゴミ回収ペア表</a>
         </div>
