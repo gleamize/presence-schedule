@@ -78,6 +78,31 @@
         .presence-link:hover { background:#3182ce; transform: translateY(-2px); box-shadow:0 6px 8px rgba(0,0,0,.15); }
         .sp-link { left:5px; background:#6c757d; }
         .sp-link:hover { background:#5a6268; transform: translateY(-2px); box-shadow:0 6px 8px rgba(0,0,0,.15); }
+
+        /* === 追加：横スクロール（右→左）お知らせ帯 === */
+        .marquee-wrap {
+            margin: 10px auto 0;
+            border: 2px solid #4299e1;         /* 既存のブルー系に合わせる */
+            border-radius: 10px;
+            background: rgba(49,130,206,.08);  /* やわらかなブルーの薄背景 */
+            overflow: hidden;
+            max-width: 760px;
+        }
+        .marquee { position: relative; white-space: nowrap; will-change: transform; }
+        .marquee-content {
+            display: inline-block;
+            padding: 6px 12px;
+            font-weight: 800;
+            font-size: 1.05em;
+            color: #2c5282;                    /* 既存テキストカラー系 */
+            animation: marquee 12s linear infinite;
+        }
+        .marquee-wrap:hover .marquee-content { animation-play-state: paused; }
+        @keyframes marquee {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        /* === ここまで === */
     </style>
 </head>
 <body>
@@ -85,6 +110,15 @@
         <div class="header-container">
             <a href="https://gleamize.github.io/sp_presence-schedule/" class="sp-link">SP版表示</a>
             <h1>📋 立会いシフト表</h1>
+
+            <!-- ▼ 追加：横スクロールお知らせ帯（タイトル直下） -->
+            <div class="marquee-wrap" role="status" aria-live="polite">
+                <div id="marquee" class="marquee">
+                    <span id="marquee-content" class="marquee-content">読み込み中...</span>
+                </div>
+            </div>
+            <!-- ▲ 追加ここまで -->
+
             <a href="https://gleamize.github.io/garbage-schedule/" class="presence-link">ゴミ回収ペア表</a>
         </div>
         <div class="content">
@@ -432,7 +466,7 @@
                 </div>
             </div>
 
-            <div class="week-section">
+            <div class="week-section" style="background: #e3f2fd;">
                 <div class="week-header">第5週</div>
                 <div class="table-container">
                     <table class="schedule-table">
@@ -620,5 +654,73 @@
             </div>
         </div>
     </div>
+
+    <!-- ▼ 追加：週次メッセージ制御（JST固定・月曜12:00切替・5週ループ） -->
+    <script>
+        // ====== 設定ここから ======
+        const PHRASES = [
+            "今週は第1週です！",
+            "今週は第2週です！",
+            "今週は第3週です！",
+            "今週は第4週です！",
+            "今週は第5週です！"
+        ];
+        // 第1週が始まるJSTの「月曜12:00」に設定（必要に応じて変更）
+        const CYCLE_START_JST = "2025-09-08T12:00:00+09:00";
+        // ====== 設定ここまで ======
+
+        const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
+
+        function nowInTokyo() {
+            const dtf = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Tokyo',
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hourCycle: 'h23'
+            });
+            const parts = Object.fromEntries(dtf.formatToParts(new Date()).map(p => [p.type, p.value]));
+            return new Date(`${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}+09:00`);
+        }
+
+        function phraseIndexFor(now, cycleStart) {
+            const diff = now.getTime() - cycleStart.getTime();
+            const weeks = Math.floor(diff / MS_PER_WEEK);
+            return ((weeks % 5) + 5) % 5; // 0〜4でループ
+        }
+
+        function nextBoundaryFrom(now, cycleStart) {
+            const diff = now.getTime() - cycleStart.getTime();
+            const weeks = Math.floor(diff / MS_PER_WEEK) + 1;
+            return new Date(cycleStart.getTime() + weeks * MS_PER_WEEK); // 次の月曜12:00
+        }
+
+        function setMarqueeText(text) {
+            const el = document.getElementById('marquee-content');
+            if (!el) return;
+            el.textContent = text;
+
+            // CSSアニメーションをリスタート
+            el.style.animation = 'none';
+            void el.offsetHeight; // reflow
+            el.style.animation = null; // 元の @keyframes に戻す
+        }
+
+        function renderBanner() {
+            const cycleStart = new Date(CYCLE_START_JST);
+            const tokyoNow = nowInTokyo();
+            const idx = phraseIndexFor(tokyoNow, cycleStart);
+            setMarqueeText(PHRASES[idx]);
+
+            const next = nextBoundaryFrom(tokyoNow, cycleStart);
+            const delay = Math.max(1000, Math.min(next.getTime() - tokyoNow.getTime(), MS_PER_WEEK - 1000));
+            setTimeout(() => {
+                renderBanner();
+                setInterval(renderBanner, MS_PER_WEEK);
+            }, delay);
+        }
+
+        document.addEventListener('DOMContentLoaded', renderBanner);
+    </script>
+    <!-- ▲ 追加ここまで -->
 </body>
 </html>
