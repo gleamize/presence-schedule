@@ -79,7 +79,7 @@
         .sp-link { left:5px; background:#6c757d; }
         .sp-link:hover { background:#5a6268; transform: translateY(-2px); box-shadow:0 6px 8px rgba(0,0,0,.15); }
 
-        /* === 追加：横スクロール（右→左）お知らせ帯 === */
+        /* === 横スクロール（右→左）お知らせ帯 === */
         .marquee-wrap {
             margin: 10px auto 0;
             border: 2px solid #ef4444;
@@ -92,8 +92,9 @@
         .marquee-content {
             display: inline-block;
             padding: 6px 12px;
-            font-weight: 800;
-            font-size: 1.05em;
+            /* ▼変更点：フォントを1サイズ大きくし、太字を解除 */
+            font-weight: 400;
+            font-size: 1.20em;
             color: #ef4444;
             animation: marquee 12s linear infinite;
         }
@@ -111,7 +112,7 @@
             <a href="https://gleamize.github.io/sp_presence-schedule/" class="sp-link">SP版表示</a>
             <h1>📋 立会いシフト表</h1>
 
-            <!-- ▼ 追加：横スクロールお知らせ帯（タイトル直下） -->
+            <!-- ▼ 横スクロールお知らせ帯（タイトル直下） -->
             <div class="marquee-wrap" role="status" aria-live="polite">
                 <div id="marquee" class="marquee">
                     <span id="marquee-content" class="marquee-content">読み込み中...</span>
@@ -513,7 +514,7 @@
                                     <span class="member-name">佐武</span>
                                 </td>
                                 <td class="data-cell support-data">
-                                    <span class="member-name">逢坂</span>
+                                    <span class="member-name">逶坂</span>
                                     <span class="member-name">山城</span>
                                 </td>
                                 <td class="data-cell priority-data">
@@ -655,7 +656,7 @@
         </div>
     </div>
 
-    <!-- ▼ 追加：週次メッセージ制御（JST固定・月曜12:00切替・5週ループ） -->
+    <!-- 週次メッセージ制御（JST固定・月曜12:00切替・5週ループ） -->
     <script>
         // ====== 設定ここから ======
         const PHRASES = [
@@ -665,7 +666,6 @@
             "今週は第4週です！",
             "今週は第5週です！"
         ];
-        // 第1週が始まるJSTの「月曜12:00」に設定（必要に応じて変更）
         const CYCLE_START_JST = "2025-09-08T12:00:00+09:00";
         // ====== 設定ここまで ======
 
@@ -685,24 +685,22 @@
         function phraseIndexFor(now, cycleStart) {
             const diff = now.getTime() - cycleStart.getTime();
             const weeks = Math.floor(diff / MS_PER_WEEK);
-            return ((weeks % 5) + 5) % 5; // 0〜4でループ
+            return ((weeks % 5) + 5) % 5;
         }
 
         function nextBoundaryFrom(now, cycleStart) {
             const diff = now.getTime() - cycleStart.getTime();
             const weeks = Math.floor(diff / MS_PER_WEEK) + 1;
-            return new Date(cycleStart.getTime() + weeks * MS_PER_WEEK); // 次の月曜12:00
+            return new Date(cycleStart.getTime() + weeks * MS_PER_WEEK);
         }
 
         function setMarqueeText(text) {
             const el = document.getElementById('marquee-content');
             if (!el) return;
             el.textContent = text;
-
-            // CSSアニメーションをリスタート
             el.style.animation = 'none';
-            void el.offsetHeight; // reflow
-            el.style.animation = null; // 元の @keyframes に戻す
+            void el.offsetHeight;
+            el.style.animation = null;
         }
 
         function renderBanner() {
@@ -721,6 +719,5 @@
 
         document.addEventListener('DOMContentLoaded', renderBanner);
     </script>
-    <!-- ▲ 追加ここまで -->
 </body>
 </html>
